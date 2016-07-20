@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+	<bean id="defaultSearchFacade" class="com.ksubaka.moviesearch.integration.impl.DefaultSearchFacade">
+		<property name="movieSearchManagers">
+			<map>
+				<entry key="omdb" value-ref="omdbApiSearchManager" />
+				<entry key="movies" value-ref="moviesApiSearchManager" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="omdbApiSearchManager" class="com.ksubaka.moviesearch.business.service.movie.impl.OmdbApiMovieSearchManager">
+		<property name="movieSearchDAO" ref="omdbApiMovieSearchDAO" />
+	</bean>
+
+	<bean id="moviesApiSearchManager" class="com.ksubaka.moviesearch.business.service.movie.impl.MoviesApiSearchManager">
+		<property name="movieSearchDAO" ref="moviesApiMovieSearchDAO" />
+	</bean>
+
+	<bean id="omdbApiMovieSearchDAO" class="com.ksubaka.moviesearch.dao.movie.impl.OmdbApiMovieSearchDAO">
+		<property name="urlSearch" value="http://www.omdbapi.com/?s=%s&amp;plot=short&amp;type=movie&amp;r=json&amp;page=%d" />
+		<property name="urlImdbID" value="http://www.omdbapi.com/?i=%s&amp;plot=short&amp;r=json" />
+		<property name="resultsPerPage" value="10" />
+	</bean>
+
+	<bean id="moviesApiMovieSearchDAO" class="com.ksubaka.moviesearch.dao.movie.impl.MoviesApiMovieSearchDAO">
+		<property name="urlSearch" value="https://www.moviesapi.com/m.php?t=%s&amp;type=movie&amp;r=json" />
+	</bean>
+</beans>
